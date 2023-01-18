@@ -4,8 +4,7 @@
 ![Platform](http://img.shields.io/badge/platform-macOS,iOS,watchOS,tvOS-lightgrey.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-swift-orange.svg?style=flat
              )](https://developer.apple.com/swift)
-[![Build Status](https://travis-ci.org/igor-makarov/Log4s.svg?branch=master)](https://travis-ci.org/igor-makarov/Log4s)
- ![Current Version](https://img.shields.io/github/tag/igor-makarov/Log4s.svg?label=Current%20Version)
+![Current Version](https://img.shields.io/github/tag/igor-makarov/Log4s.svg?label=Current%20Version)
 
 Log4s is a logging library for swift projects, that will allow you to log in a very flexible way.
 
