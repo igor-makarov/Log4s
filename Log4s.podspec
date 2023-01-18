@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.10"
   s.swift_versions = ['4.0', '4.1', '4.2', '5.0']
 
-  s.source       = { :git => "https://github.com/igor-makarov/Log4s", :tag => "v1.2.0" }
+  s.source       = { :git => "https://github.com/igor-makarov/Log4s", :tag => "v1.3.0" }
 
   s.source_files = "Log4swift", "Log4swift/**/*.{swift,h,m}", "Third parties/**/*.{h,m}"
 
