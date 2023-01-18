@@ -1,22 +1,21 @@
-# Log4Swift
+# Log4s
 [![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg?style=flat
             )](http://mit-license.org)
-![Platform](http://img.shields.io/badge/platform-macOS,iOS,tvOS-lightgrey.svg?style=flat)
+![Platform](http://img.shields.io/badge/platform-macOS,iOS,watchOS,tvOS-lightgrey.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-swift-orange.svg?style=flat
              )](https://developer.apple.com/swift)
-[![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Travis-ci Build Status](https://travis-ci.org/jduquennoy/Log4swift.svg)](https://travis-ci.org/jduquennoy/Log4swift)
+[![Build Status](https://travis-ci.org/igor-makarov/Log4s.svg?branch=master)](https://travis-ci.org/igor-makarov/Log4s)
+ ![Current Version](https://img.shields.io/github/tag/igor-makarov/Log4s.svg?label=Current%20Version)
 
-Log4Swift is a logging library for swift projects, that will allow you to log in a very flexible way.
+Log4s is a logging library for swift projects, that will allow you to log in a very flexible way.
 
 Its ultimate goal is to be the tool you need to make your logs as valuable as possible, both in your developpment environment and in production.
 
 ## Compatibility
 Current version requires Xcode 9 and swift 4.1.
 
-- For swift 3, use version 1.0.2 ([tag v1.0.2](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.2))
-- For swift 2.3, use version 1.0.0b5 ([tag v1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.0b5))
+- For swift 3, use version 1.0.2 ([tag v1.0.2](https://github.com/igor-makarov/Log4s/releases/tag/v1.0.2))
+- For swift 2.3, use version 1.0.0b5 ([tag v1.0.0b5](https://github.com/igor-makarov/Log4s/releases/tag/v1.0.0b5))
 
 It can be used in projects targetting either OS X (>= 10.10), iOS (>= iOS 8) or appleTV, and written either in swift or objective-C (or a mix of those two).
 
@@ -31,26 +30,19 @@ Add those lines to your Podfile to embed this library in an iOS project (with th
 
 ```
 platform :ios, '8'
-pod 'Log4swift', '1.2.0'
+pod 'Log4s', '1.2.0'
 use_frameworks!
 ```
 And in an OS X project :
 
 ```
 platform :osx, '10.10'
-pod 'Log4swift', '1.2.0'
+pod 'Log4s', '1.2.0'
 use_frameworks!
 ```
 
-### Carthage
-Add this line to your Cartfile (with the version you want):
-
-```
-github "jduquennoy/Log4swift" ~> 1.2.0
-```
-
 ## Features
-Here are the main features you can expect from Log4swift :
+Here are the main features you can expect from Log4s :
 
 * straightforward to use for simple cases : default configuration should just work, one-line configuration for typical uses like logging to IDE console or to system logs
 * flexible for more complexe cases, with multi-destination logging, hierarchic loggers configuration, ...
@@ -65,7 +57,7 @@ Here are the main features you can expect from Log4swift :
 
 Another goal, that I think we all share, is to have readable and tested code.
 
-* The code coverage of Log4swift's code (excluding third party code) is 100% for most of the source files, and very close to it for others.
+* The code coverage of Log4s's code (excluding third party code) is 100% for most of the source files, and very close to it for others.
 * Feel free to send feedbacks or contribute if you find the code not readable enough, or if you have ideas to highen the quality of that code !
 
 ## Concepts
@@ -195,4 +187,4 @@ will produce this kind of log:
 [2015-02-02 12:45:23 +0000][Debug][logger.name] The message that was sent to the logger
 ```
 
-See [this page](https://github.com/jduquennoy/Log4swift/wiki/Provided-Formatters) for more details, including a full list of available markers.
+See [this page](https://github.com/igor-makarov/Log4s/wiki/Provided-Formatters) for more details, including a full list of available markers.
