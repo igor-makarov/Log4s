@@ -9,7 +9,9 @@
 
 Log4s is a logging library for swift projects, that will allow you to log in a very flexible way.
 
-Its ultimate goal is to be the tool you need to make your logs as valuable as possible, both in your developpment environment and in production.
+It's a fork of [Log4swift](https://github.com/jduquennoy/Log4swift) but maintained.
+
+Its ultimate goal is to be the tool you need to make your logs as valuable as possible, both in your development environment and in production.
 
 ## Compatibility
 Current version requires Xcode 9 and swift 4.1.
