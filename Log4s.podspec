@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "Log4s"
-  s.version      = "1.3.0"
-  s.summary      = "A looging library written in swift."
+  s.version      = "1.4.0"
+  s.summary      = "A logging library written in swift."
 
   s.description  = <<-DESC
                    Log4s is a logging library similar in philosophy to log4j.
