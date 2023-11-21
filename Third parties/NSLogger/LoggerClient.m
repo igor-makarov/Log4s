@@ -464,7 +464,7 @@ void LoggerStop(NSLogger*logger)
 	}
 }
 
-static void LoggerFlushAllOnExit()
+static void LoggerFlushAllOnExit(void)
 {
 	// this function is automatically configured by NSLogger to flush all connected loggers
 	// on exit. this guarantees that the developer sees the last messages issued by the application.
@@ -1112,7 +1112,7 @@ static void *LoggerConsoleGrabThread(void *context)
 	return NULL;
 }
 
-static void LoggerStartConsoleRedirection()
+static void LoggerStartConsoleRedirection(void)
 {
 	// keep the original pipes so we can still forward everything
 	// (i.e. to the running IDE that needs to display or interpret console messages)
@@ -1150,7 +1150,7 @@ static void LoggerStartConsoleRedirection()
 	pthread_create(&consoleGrabThread, NULL, &LoggerConsoleGrabThread, NULL);
 }
 
-static void LoggerStopConsoleRedirection()
+static void LoggerStopConsoleRedirection(void)
 {
 	// close the pipes - will force exiting the console logger thread
 	// assume the console grabber mutex has been acquired
