@@ -129,7 +129,11 @@ public class FileAppender : Appender {
         return
       }
       if let dataToLog = normalizedLog.data(using: String.Encoding.utf8, allowLossyConversion: true) {
-        self.fileHandler?.write(dataToLog)
+        if #available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *) {
+          try? self.fileHandler?.write(contentsOf: dataToLog)
+        } else {
+          self.fileHandler?.write(dataToLog)
+        }
         self.rotationPolicies.forEach { $0.appenderDidAppend(data: dataToLog)}
       }
     }
