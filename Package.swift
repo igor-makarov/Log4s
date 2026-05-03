@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "Log4swift",
     platforms: [
-        .iOS(.v9), .macOS(.v10_10), .watchOS(.v2)
+        .iOS(.v12), .macOS(.v10_13), .watchOS(.v4)
     ],
     products: [
         .library(name: "Log4swift", targets: ["Log4swift"])

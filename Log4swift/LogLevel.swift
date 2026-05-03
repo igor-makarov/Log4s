@@ -30,7 +30,20 @@ import Log4swiftObjC
 // This file provides the Swift-only conveniences — `description` and a
 // case-insensitive string initialiser — as an extension.
 
-extension LogLevel: @retroactive CustomStringConvertible {
+// Under SwiftPM `LogLevel` is imported from the sibling `Log4swiftObjC`
+// module, so `CustomStringConvertible` is a retroactive conformance and
+// needs the attribute to silence Swift 6's warning. Under CocoaPods the
+// enum lives in the same module, so `@retroactive` would itself warn.
+// Swift does not permit `#if` to straddle an extension's opening brace,
+// so the conformance is declared in its own empty extension and the
+// actual implementations live in a second extension below.
+#if SWIFT_PACKAGE
+extension LogLevel: @retroactive CustomStringConvertible {}
+#else
+extension LogLevel: CustomStringConvertible {}
+#endif
+
+extension LogLevel {
 
   /// Converts a string to a log level if possible.
   /// This initializer is not case sensitive.

@@ -19,7 +19,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
 import Log4swiftObjC
+#endif
 
 /**
 This appender will send messages to ASL, the Apple System Log.

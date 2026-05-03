@@ -21,7 +21,9 @@
 #if !os(watchOS)
 
 import Foundation
+#if SWIFT_PACKAGE
 import NSLoggerObjC
+#endif
 
 /**
 The NSLogger appender relies on the NSLogger project (see https://github.com/fpillet/NSLogger) to send log messages over the network.  

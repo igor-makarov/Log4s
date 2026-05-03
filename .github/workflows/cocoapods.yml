@@ -1,0 +1,34 @@
+name: pod lib lint
+
+jobs:
+  pod-lib-lint:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ios, osx, watchos]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          gem install cocoapods --no-document
+          pod --version
+
+      # --allow-warnings keeps the lint focused on real errors: the vendored
+      # NSLogger sources emit `OSAtomicIncrement32Barrier` deprecation warnings
+      # that are not ours to fix.
+      - run: pod lib lint Log4s.podspec --platforms=${{ matrix.platform }} --allow-warnings
+
+"on":
+  push:
+  pull_request:
