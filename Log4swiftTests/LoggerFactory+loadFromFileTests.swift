@@ -217,15 +217,13 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Identifier.rawValue: "StdOutAppender"]
     let nslogAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLogAppender"]
-    let aslAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ASLAppender",
-      LoggerFactory.DictionaryKey.Identifier.rawValue: "ASLAppender"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary]]
     
     // Execute
     let (_, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
-    XCTAssertEqual(appenders.count, 5)
+    XCTAssertEqual(appenders.count, 4)
     for currentAppender in appenders {
 			XCTAssertEqual(currentAppender.identifier, String(describing: type(of: currentAppender)).components(separatedBy: ".").last!)
     }
@@ -242,15 +240,13 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Identifier.rawValue: "StdOutAppender"]
     let nslogAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogappENder",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLogAppender"]
-    let aslAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ASLAppenDEr",
-      LoggerFactory.DictionaryKey.Identifier.rawValue: "ASLAppender"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary]]
     
     // Execute
     let (_, appenders, _) = try factory.readConfigurationToTupple(fromDictionary: dictionary)
     
-    XCTAssertEqual(appenders.count, 5)
+    XCTAssertEqual(appenders.count, 4)
     for currentAppender in appenders {
       XCTAssertEqual(currentAppender.identifier, String(describing: type(of: currentAppender)).components(separatedBy: ".").last!)
     }

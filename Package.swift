@@ -14,14 +14,6 @@ let package = Package(
     // the SwiftPM package via `xcodebuild -scheme Log4swift`.
 
     targets: [
-        // Apple System Log wrapper — all platforms.
-        .target(
-            name: "Log4swiftObjC",
-            path: "Log4swift/Objective-c wrappers",
-            sources: ["ASLWrapper.m"],
-            publicHeadersPath: "."
-        ),
-
         // NSLogger — not available on watchOS (matches podspec's watchos.exclude_files).
         .target(
             name: "NSLoggerObjC",
@@ -35,14 +27,12 @@ let package = Package(
         .target(
             name: "Log4swift",
             dependencies: [
-                "Log4swiftObjC",
                 .target(name: "NSLoggerObjC",
                         condition: .when(platforms: [.iOS, .macOS]))
             ],
             path: "Log4swift",
             exclude: [
-                "log4swift.h",
-                "Objective-c wrappers"
+                "log4swift.h"
             ],
             sources: [
                 "Appenders",

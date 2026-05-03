@@ -16,7 +16,6 @@ class AppendersRegistryTests: XCTestCase {
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("FileAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("NSLoggerAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("NSLogAppender"))
-    XCTAssertNotNil(AppendersRegistry.appenderForClassName("ASLAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("SystemAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("AppleUnifiedLoggerAppender"))
   }

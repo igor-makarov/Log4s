@@ -17,7 +17,6 @@ public struct AppendersRegistry {
       StdOutAppender.self,
       FileAppender.self,
       NSLogAppender.self,
-      ASLAppender.self,
       SystemAppender.self
     ]
     #if !os(watchOS)

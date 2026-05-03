@@ -32,5 +32,3 @@ FOUNDATION_EXPORT const unsigned char log4swiftVersionString[];
 #import "LoggerClient.h"
 #import "LoggerCommon.h"
 #endif
-#import "ASLWrapper.h"
-#import "LogLevel.h"

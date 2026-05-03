@@ -19,36 +19,27 @@
 //
 
 import Foundation
-#if SWIFT_PACKAGE
-import Log4swiftObjC
-#endif
 
-// The `LogLevel` enum itself is declared in `Objective-c wrappers/LogLevel.h`
-// (via NS_CLOSED_ENUM) so the Obj-C helpers and Swift code share a single
-// definition. Swift sees it as a frozen `enum LogLevel: Int`.
-//
-// This file provides the Swift-only conveniences — `description` and a
-// case-insensitive string initialiser — as an extension.
+/**
+Log level defines the importance of the log : is it just a debug log, an informational notice, or an error.
+Order of the levels is :
 
-// Under SwiftPM `LogLevel` is imported from the sibling `Log4swiftObjC`
-// module, so `CustomStringConvertible` is a retroactive conformance and
-// needs the attribute to silence Swift 6's warning. Under CocoaPods the
-// enum lives in the same module, so `@retroactive` would itself warn.
-// Swift does not permit `#if` to straddle an extension's opening brace,
-// so the conformance is declared in its own empty extension and the
-// actual implementations live in a second extension below.
-#if SWIFT_PACKAGE
-extension LogLevel: @retroactive CustomStringConvertible {}
-#else
-extension LogLevel: CustomStringConvertible {}
-#endif
-
-extension LogLevel {
-
+Trace < Debug < Info < Warning < Error < Fatal < Off
+*/
+@objc public enum LogLevel: Int, CustomStringConvertible {
+  
+  case Trace = 0
+  case Debug = 1
+  case Info = 2
+  case Warning = 3
+  case Error = 4
+  case Fatal = 5
+  case Off = 6
+  
   /// Converts a string to a log level if possible.
-  /// This initializer is not case sensitive.
+  /// This initializer is not case sensitive
   public init?(_ stringValue: String) {
-    switch stringValue.lowercased() {
+    switch(stringValue.lowercased()) {
     case LogLevel.Trace.description.lowercased():
       self = .Trace
     case LogLevel.Debug.description.lowercased():
@@ -67,17 +58,26 @@ extension LogLevel {
       return nil
     }
   }
-
+  
   /// Returns a human readable representation of the log level.
-  public var description: String {
-    switch self {
-    case .Trace:   return "Trace"
-    case .Debug:   return "Debug"
-    case .Info:    return "Info"
-    case .Warning: return "Warning"
-    case .Error:   return "Error"
-    case .Fatal:   return "Fatal"
-    case .Off:     return "Off"
+  public var description : String {
+    get {
+      switch(self) {
+      case .Trace:
+        return "Trace"
+      case .Debug:
+        return "Debug"
+      case .Info:
+        return "Info"
+      case .Warning:
+        return "Warning"
+      case .Error:
+        return "Error"
+      case .Fatal:
+        return "Fatal"
+      case .Off:
+        return "Off"
+      }
     }
   }
 }

@@ -142,10 +142,10 @@ extension LoggerFactory {
   */
   public func configureForSystemConsole(thresholdLevel: LogLevel = .Warning) {
     self.resetConfiguration()
-    
-    let systemConsoleAppender = ASLAppender("systemConsoleAppender")
+
+    let systemConsoleAppender = SystemAppender("systemConsoleAppender")
     systemConsoleAppender.thresholdLevel = thresholdLevel
-    
+
     self.rootLogger.appenders = [systemConsoleAppender]
   }
 

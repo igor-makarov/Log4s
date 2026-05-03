@@ -206,7 +206,7 @@ class LoggerFactoryTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(self.factory.rootLogger.appenders.count, 1)
-    XCTAssertEqual(String(describing: type(of: self.factory.rootLogger.appenders[0])), String(describing: ASLAppender.self))
+    XCTAssertEqual(String(describing: type(of: self.factory.rootLogger.appenders[0])), String(describing: SystemAppender.self))
     XCTAssertEqual(self.factory.loggers.count, 0)
   }
   

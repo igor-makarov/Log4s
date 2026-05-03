@@ -50,14 +50,10 @@ public class SystemAppender: Appender {
   
   @objc
   public required init(_ identifier: String) {
-    if #available(iOS 10.0, macOS 10.12, watchOS 3, *) {
-      self.backendAppender = AppleUnifiedLoggerAppender(identifier)
-    } else if #available(iOS 9.0, macOS 10.9, *) {
-      self.backendAppender = ASLAppender(identifier)
-    } else {
-      self.backendAppender = nil
-      NSLog("No system appender found for current system")
-    }
+    // AppleUnifiedLoggerAppender requires iOS 10 / macOS 10.12 / watchOS 3,
+    // all of which are below the package's deployment targets, so it is
+    // always available and no fallback is needed.
+    self.backendAppender = AppleUnifiedLoggerAppender(identifier)
     super.init(identifier)
   }
   
