@@ -14,6 +14,15 @@ jobs:
           sw_vers
           xcodebuild -version
 
+      # Force CoreSimulator to enumerate its devices. Immediately after
+      # `maxim-lobanov/setup-xcode` switches Xcode, the CoreSimulator service
+      # is sometimes still warming up and `xcodebuild test` hits a race where
+      # it only sees the "Any iOS Simulator Device" placeholder and fails
+      # with "Unable to find a device matching the provided destination".
+      # A single `simctl list` poke is enough to force enumeration.
+      - name: Warm up CoreSimulator
+        run: xcrun simctl list devices available
+
       # `name=` is required for `xcodebuild test` (it refuses generic
       # destinations). Bump it when Xcode upgrades its default device
       # ("iPhone 15" → "iPhone 16" → …); `OS=latest` picks the newest
