@@ -6,6 +6,12 @@
 //  Copyright © 2017 jerome. All rights reserved.
 //
 
+// The whole suite shells out to `log show` to verify that messages made it
+// to the unified log, and uses `Process()` to do so. Both `Process` and the
+// `log` command-line tool are macOS-only, so the whole file only makes sense
+// on macOS.
+#if os(macOS)
+
 import XCTest
 import Foundation
 @testable import Log4swift
@@ -197,3 +203,5 @@ struct SystemLogMessage: Decodable {
   let processImagePath: String
   let senderImagePath: String
 }
+
+#endif

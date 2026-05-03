@@ -227,7 +227,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     
     XCTAssertEqual(appenders.count, 5)
     for currentAppender in appenders {
-			XCTAssertEqual(currentAppender.identifier, currentAppender.className.components(separatedBy: ".").last!)
+			XCTAssertEqual(currentAppender.identifier, String(describing: type(of: currentAppender)).components(separatedBy: ".").last!)
     }
   }
   
@@ -252,7 +252,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     
     XCTAssertEqual(appenders.count, 5)
     for currentAppender in appenders {
-      XCTAssertEqual(currentAppender.identifier, currentAppender.className.components(separatedBy: ".").last!)
+      XCTAssertEqual(currentAppender.identifier, String(describing: type(of: currentAppender)).components(separatedBy: ".").last!)
     }
   }
   

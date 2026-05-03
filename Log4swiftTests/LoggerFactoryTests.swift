@@ -175,7 +175,7 @@ class LoggerFactoryTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(self.factory.rootLogger.appenders.count, 1)
-    XCTAssertEqual(self.factory.rootLogger.appenders[0].className, StdOutAppender.className())
+    XCTAssertEqual(String(describing: type(of: self.factory.rootLogger.appenders[0])), String(describing: StdOutAppender.self))
     XCTAssertEqual(self.factory.loggers.count, 0)
   }
   
@@ -206,7 +206,7 @@ class LoggerFactoryTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(self.factory.rootLogger.appenders.count, 1)
-    XCTAssertEqual(self.factory.rootLogger.appenders[0].className, ASLAppender.className())
+    XCTAssertEqual(String(describing: type(of: self.factory.rootLogger.appenders[0])), String(describing: ASLAppender.self))
     XCTAssertEqual(self.factory.loggers.count, 0)
   }
   
@@ -219,7 +219,7 @@ class LoggerFactoryTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(self.factory.rootLogger.appenders.count, 1)
-    XCTAssertEqual(self.factory.rootLogger.appenders[0].className, NSLoggerAppender.className())
+    XCTAssertEqual(String(describing: type(of: self.factory.rootLogger.appenders[0])), String(describing: NSLoggerAppender.self))
     XCTAssertEqual(self.factory.loggers.count, 0)
   }
   
