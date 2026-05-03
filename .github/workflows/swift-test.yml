@@ -15,12 +15,13 @@ jobs:
           xcodebuild -version
           swift --version
 
-      # Some tests exercise ASL / unified logging — route xctest logs through
-      # the unified log so the assertions can read them back.
+      # AppleUnifiedLoggerAppenderTests verify messages via `log show`, which
+      # only reports persisted entries. Debug-level messages are dropped by
+      # default; `persist:debug` tells the unified log daemon to keep them.
       - name: Configure unified logger
         run: |
           sudo log config --mode "level:off"
-          sudo log config --mode "level:debug" --subsystem com.apple.dt.xctest.tool
+          sudo log config --mode "level:debug,persist:debug" --subsystem com.apple.dt.xctest.tool
 
       - run: swift test
 

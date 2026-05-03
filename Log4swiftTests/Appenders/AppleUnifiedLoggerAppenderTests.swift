@@ -71,11 +71,21 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
     appender.log(logMessage, level: LogLevel.Debug, info: infoDictionary)
     
     let foundMessages = try! self.findLogMessage(logMessage)
-    XCTAssertEqual(foundMessages.count, 1)
-    if foundMessages.count > 0 {
-      XCTAssertEqual(foundMessages[0].messageType, "Debug")
-      XCTAssertEqual(foundMessages[0].category, infoDictionary[LogInfoKeys.LoggerName])
+    if foundMessages.isEmpty {
+      XCTFail("""
+        No debug-level message was found via `log show`. Unlike info/warn/error/fatal,
+        debug messages are dropped from on-disk storage unless `persist:debug` is set.
+        To run this test locally, configure the unified log first:
+
+          sudo log config --mode 'level:debug,persist:debug' --subsystem com.apple.dt.xctest.tool
+
+        The CI workflow already does this.
+        """)
+      return
     }
+    XCTAssertEqual(foundMessages.count, 1)
+    XCTAssertEqual(foundMessages[0].messageType, "Debug")
+    XCTAssertEqual(foundMessages[0].category, infoDictionary[LogInfoKeys.LoggerName])
   }
 
   func testLogInfoMessageAsInfo() {

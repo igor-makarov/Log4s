@@ -131,6 +131,10 @@ public class StdOutAppender: Appender {
     
 		let finalLogString = self.colorizeLog(log: log, level: level) + "\n"
     fputs(finalLogString, destinationFile)
+    // stdout/stderr are line-buffered only when attached to a tty; under any
+    // redirected output (pipes, files, CI log capture) they are fully
+    // buffered and the log would otherwise sit in the buffer indefinitely.
+    fflush(destinationFile)
   }
   
 }
