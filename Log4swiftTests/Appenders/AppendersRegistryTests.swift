@@ -14,7 +14,6 @@ class AppendersRegistryTests: XCTestCase {
   func testRegistryKnowsIncludedAppendersByDefault() {
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("StdOutAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("FileAppender"))
-    XCTAssertNotNil(AppendersRegistry.appenderForClassName("NSLoggerAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("NSLogAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("SystemAppender"))
     XCTAssertNotNil(AppendersRegistry.appenderForClassName("AppleUnifiedLoggerAppender"))

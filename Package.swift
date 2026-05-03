@@ -14,22 +14,9 @@ let package = Package(
     // the SwiftPM package via `xcodebuild -scheme Log4swift`.
 
     targets: [
-        // NSLogger — not available on watchOS (matches podspec's watchos.exclude_files).
-        .target(
-            name: "NSLoggerObjC",
-            path: "Third parties/NSLogger",
-            exclude: ["LICENSE", "CREDITS"],
-            sources: ["LoggerClient.m"],
-            publicHeadersPath: "."
-        ),
-
         // Pure-Swift module.
         .target(
             name: "Log4swift",
-            dependencies: [
-                .target(name: "NSLoggerObjC",
-                        condition: .when(platforms: [.iOS, .macOS]))
-            ],
             path: "Log4swift",
             exclude: [
                 "log4swift.h"
@@ -46,8 +33,7 @@ let package = Package(
                 "LoggerFactory.swift",
                 "LoggerFactory+loadFromFile.swift",
                 "LogInformation.swift",
-                "LogLevel.swift",
-                "Exports.swift"
+                "LogLevel.swift"
             ]
         ),
 

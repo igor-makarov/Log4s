@@ -28,9 +28,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/igor-makarov/Log4s", :tag => "#{s.version}" }
 
-  s.source_files = "Log4swift", "Log4swift/**/*.{swift,h,m}", "Third parties/**/*.{h,m}"
+  s.source_files = "Log4swift", "Log4swift/**/*.{swift,h,m}"
 
-  s.public_header_files = ["Log4swift/log4swift.h", "Third Parties/NSLogger/*.h"]
-
-  s.watchos.exclude_files = ["Third Parties/NSLogger/*", "Log4swift/Appenders/NSLoggerAppender.swift"]
+  s.public_header_files = ["Log4swift/log4swift.h"]
 end
