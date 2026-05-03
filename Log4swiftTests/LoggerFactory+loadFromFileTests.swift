@@ -186,10 +186,9 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Identifier.rawValue: "appender1",
       Appender.DictionaryKey.FormatterId.rawValue: "formatter2",
       FileAppender.DictionaryKey.FilePath.rawValue: "/test/path"]
-    let appenderDictionary2 = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLoggerAppender",
+    let appenderDictionary2 = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "appender2",
-      Appender.DictionaryKey.FormatterId.rawValue: "formatter1",
-      NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"]
+      Appender.DictionaryKey.FormatterId.rawValue: "formatter1"]
     
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary1, formattersDictionary2],
       LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary1, appenderDictionary2]]
@@ -210,24 +209,19 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let fileAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "FileAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "FileAppender",
       FileAppender.DictionaryKey.FilePath.rawValue: "/test/path"]
-    let nsloggerAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLoggerAppender",
-      LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLoggerAppender",
-      NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"]
     let stdoutAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "StdOutAppender"]
     let nslogAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLogAppender"]
-    let aslAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ASLAppender",
-      LoggerFactory.DictionaryKey.Identifier.rawValue: "ASLAppender"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary]]
     
     // Execute
     let (_, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
-    XCTAssertEqual(appenders.count, 5)
+    XCTAssertEqual(appenders.count, 3)
     for currentAppender in appenders {
-			XCTAssertEqual(currentAppender.identifier, currentAppender.className.components(separatedBy: ".").last!)
+			XCTAssertEqual(currentAppender.identifier, String(describing: type(of: currentAppender)).components(separatedBy: ".").last!)
     }
   }
   
@@ -235,24 +229,19 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let fileAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "FileAPPender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "FileAppender",
       FileAppender.DictionaryKey.FilePath.rawValue: "/test/path"]
-    let nsloggerAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogGerAppender",
-      LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLoggerAppender",
-      NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"]
     let stdoutAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdouTappender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "StdOutAppender"]
     let nslogAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogappENder",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLogAppender"]
-    let aslAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ASLAppenDEr",
-      LoggerFactory.DictionaryKey.Identifier.rawValue: "ASLAppender"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary]]
     
     // Execute
     let (_, appenders, _) = try factory.readConfigurationToTupple(fromDictionary: dictionary)
     
-    XCTAssertEqual(appenders.count, 5)
+    XCTAssertEqual(appenders.count, 3)
     for currentAppender in appenders {
-      XCTAssertEqual(currentAppender.identifier, currentAppender.className.components(separatedBy: ".").last!)
+      XCTAssertEqual(currentAppender.identifier, String(describing: type(of: currentAppender)).components(separatedBy: ".").last!)
     }
   }
   
@@ -429,7 +418,8 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {
-    let filePath = Bundle(for: type(of: self)).path(forResource: "ValidCompleteConfiguration", ofType: "plist")
+    // Under SwiftPM resources live in `Bundle.module`, not the test bundle itself.
+    let filePath = Bundle.module.path(forResource: "ValidCompleteConfiguration", ofType: "plist")
     
     // Execute
 		_ = XCTAssertNoThrow  { try self.factory.readConfiguration(fromPlistFile: filePath!); }

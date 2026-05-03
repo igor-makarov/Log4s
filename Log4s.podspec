@@ -19,18 +19,16 @@ Pod::Spec.new do |s|
   s.authors       = { "Igor Makarov" => "igormaka@gmail.com",
                       "Jerome Duquennoy" => "jerome@duquennoy.fr" }
 
-  s.ios.deployment_target = "8.0"
-  s.watchos.deployment_target = "2.0"
-  s.osx.deployment_target = "10.10"
+  s.ios.deployment_target = "12.0"
+  s.watchos.deployment_target = "4.0"
+  s.osx.deployment_target = "10.13"
   s.swift_versions = ['4.0', '4.1', '4.2', '5.0']
 
   s.module_name = 'Log4swift'
 
   s.source       = { :git => "https://github.com/igor-makarov/Log4s", :tag => "#{s.version}" }
 
-  s.source_files = "Log4swift", "Log4swift/**/*.{swift,h,m}", "Third parties/**/*.{h,m}"
+  s.source_files = "Log4swift", "Log4swift/**/*.{swift,h,m}"
 
-  s.public_header_files = ["Log4swift/log4swift.h", "Third Parties/NSLogger/*.h", "Log4swift/Objective-c wrappers/*.h"]
-
-  s.watchos.exclude_files = ["Third Parties/NSLogger/*", "Log4swift/Appenders/NSLoggerAppender.swift"]
+  s.public_header_files = ["Log4swift/log4swift.h"]
 end

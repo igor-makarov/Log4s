@@ -142,27 +142,11 @@ extension LoggerFactory {
   */
   public func configureForSystemConsole(thresholdLevel: LogLevel = .Warning) {
     self.resetConfiguration()
-    
-    let systemConsoleAppender = ASLAppender("systemConsoleAppender")
+
+    let systemConsoleAppender = SystemAppender("systemConsoleAppender")
     systemConsoleAppender.thresholdLevel = thresholdLevel
-    
+
     self.rootLogger.appenders = [systemConsoleAppender]
   }
 
-  /**
-  Configures the root logger to output logs to NSLogger. SSL and local cache will be enabled on the appender.
-  This configuration is not meant to be used for production.
-  
-  **This method will replace your current configuration by a new one.**
-  */
-  #if !os(watchOS)
-  public func configureForNSLogger(remoteHost: String = "127.0.0.1", remotePort: UInt32 = 50000, thresholdLevel: LogLevel = .Debug) {
-    self.resetConfiguration()
-    
-    let nsloggerAppender = NSLoggerAppender(identifier: "nsloggerAppender", remoteHost: remoteHost, remotePort: remotePort, useLocalCache: true, useSSL: true)
-    nsloggerAppender.thresholdLevel = thresholdLevel
-    
-    self.rootLogger.appenders = [nsloggerAppender]
-  }
-  #endif
 }

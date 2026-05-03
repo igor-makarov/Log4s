@@ -17,12 +17,8 @@ public struct AppendersRegistry {
       StdOutAppender.self,
       FileAppender.self,
       NSLogAppender.self,
-      ASLAppender.self,
       SystemAppender.self
     ]
-    #if !os(watchOS)
-      appenders.append(NSLoggerAppender.self)
-    #endif
     if #available(iOS 10.0, macOS 10.12, watchOS 3, *) {
       appenders.append(AppleUnifiedLoggerAppender.self)
     }
