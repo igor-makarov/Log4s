@@ -1,7 +1,7 @@
-name: swift test
+name: xcodebuild macOS
 
 jobs:
-  swift-test:
+  xcodebuild-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +13,6 @@ jobs:
         run: |
           sw_vers
           xcodebuild -version
-          swift --version
 
       # Some tests exercise ASL / unified logging — route xctest logs through
       # the unified log so the assertions can read them back.
@@ -22,7 +21,10 @@ jobs:
           sudo log config --mode "level:off"
           sudo log config --mode "level:debug" --subsystem com.apple.dt.xctest.tool
 
-      - run: swift test
+      # xcodebuild drives the SwiftPM package directly via the synthetic
+      # scheme generated from Package.swift — no .xcodeproj / .xcworkspace
+      # required.
+      - run: xcodebuild test -scheme Log4swift -destination 'platform=macOS'
 
 "on":
   push:
