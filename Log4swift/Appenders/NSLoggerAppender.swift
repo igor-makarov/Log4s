@@ -18,7 +18,10 @@
 // limitations under the License.
 //
 
+#if !os(watchOS)
+
 import Foundation
+import NSLoggerObjC
 
 /**
 The NSLogger appender relies on the NSLogger project (see https://github.com/fpillet/NSLogger) to send log messages over the network.  
@@ -165,3 +168,5 @@ public class NSLoggerAppender : Appender {
     LoggerStart(self.logger)
   }
 }
+
+#endif

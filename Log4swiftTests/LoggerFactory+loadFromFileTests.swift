@@ -429,7 +429,8 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {
-    let filePath = Bundle(for: type(of: self)).path(forResource: "ValidCompleteConfiguration", ofType: "plist")
+    // Under SwiftPM resources live in `Bundle.module`, not the test bundle itself.
+    let filePath = Bundle.module.path(forResource: "ValidCompleteConfiguration", ofType: "plist")
     
     // Execute
 		_ = XCTAssertNoThrow  { try self.factory.readConfiguration(fromPlistFile: filePath!); }

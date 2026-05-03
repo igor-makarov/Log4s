@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import Log4swiftObjC
 
 /**
 This appender will send messages to ASL, the Apple System Log.

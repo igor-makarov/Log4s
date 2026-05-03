@@ -19,8 +19,8 @@
 //
 
 #import "ASLWrapper.h"
+#import "LogLevel.h"
 #import <asl.h>
-#import <Log4swift/Log4swift-Swift.h>
 
 @implementation ASLWrapper {
   aslclient logClient;

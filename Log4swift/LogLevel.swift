@@ -19,27 +19,23 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import Log4swiftObjC
+#endif
 
-/**
-Log level defines the importance of the log : is it just a debug log, an informational notice, or an error.
-Order of the levels is :
+// The `LogLevel` enum itself is declared in `Objective-c wrappers/LogLevel.h`
+// (via NS_CLOSED_ENUM) so the Obj-C helpers and Swift code share a single
+// definition. Swift sees it as a frozen `enum LogLevel: Int`.
+//
+// This file provides the Swift-only conveniences — `description` and a
+// case-insensitive string initialiser — as an extension.
 
-Trace < Debug < Info < Warning < Error < Fatal < Off
-*/
-@objc public enum LogLevel: Int, CustomStringConvertible {
-  
-  case Trace = 0
-  case Debug = 1
-  case Info = 2
-  case Warning = 3
-  case Error = 4
-  case Fatal = 5
-  case Off = 6
-  
+extension LogLevel: @retroactive CustomStringConvertible {
+
   /// Converts a string to a log level if possible.
-  /// This initializer is not case sensitive
+  /// This initializer is not case sensitive.
   public init?(_ stringValue: String) {
-    switch(stringValue.lowercased()) {
+    switch stringValue.lowercased() {
     case LogLevel.Trace.description.lowercased():
       self = .Trace
     case LogLevel.Debug.description.lowercased():
@@ -58,26 +54,17 @@ Trace < Debug < Info < Warning < Error < Fatal < Off
       return nil
     }
   }
-  
+
   /// Returns a human readable representation of the log level.
-  public var description : String {
-    get {
-      switch(self) {
-      case .Trace:
-        return "Trace"
-      case .Debug:
-        return "Debug"
-      case .Info:
-        return "Info"
-      case .Warning:
-        return "Warning"
-      case .Error:
-        return "Error"
-      case .Fatal:
-        return "Fatal"
-      case .Off:
-        return "Off"
-      }
+  public var description: String {
+    switch self {
+    case .Trace:   return "Trace"
+    case .Debug:   return "Debug"
+    case .Info:    return "Info"
+    case .Warning: return "Warning"
+    case .Error:   return "Error"
+    case .Fatal:   return "Fatal"
+    case .Off:     return "Off"
     }
   }
 }
