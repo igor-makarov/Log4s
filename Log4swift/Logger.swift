@@ -30,16 +30,17 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case Asynchronous = "Asynchronous"
   }
   
-  // Serial queue used when a logger is marked `asynchronous`. Runs at
-  // `.utility` QoS — classic "user-initiated work that can take a while".
-  // Historically this queue used `.background`, but iOS Simulator (and real
-  // iOS devices under load) aggressively starves `.background` QoS, which
-  // made async logging never actually fire there. `.utility` is the correct
-  // level for deferred-but-not-idle work like log I/O.
-  private static let loggingQueue = DispatchQueue(
-    label: "log4swift.dispatchLoggingQueue",
-    qos: .utility
-  )
+  private static let loggingQueue:DispatchQueue = {
+    let createdQueue: DispatchQueue
+    
+    if #available(OSX 10.10, *) {
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", qos: .background, attributes: []) //(label: "log4swift.dispatchLoggingQueue", attributes: [.serial, .background])
+    } else {
+      let backgroundQueue = DispatchQueue.global(priority: .background)
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [], target: backgroundQueue)
+    }
+    return createdQueue
+  }()
   
   /// The UTI string that identifies the logger. Example : product.module.feature
   public let identifier: String
