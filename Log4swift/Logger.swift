@@ -30,10 +30,17 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case Asynchronous = "Asynchronous"
   }
   
-  private static let loggingQueue = DispatchQueue(
-    label: "log4swift.dispatchLoggingQueue",
-    qos: .background
-  )
+  private static let loggingQueue:DispatchQueue = {
+    let createdQueue: DispatchQueue
+    
+    if #available(OSX 10.10, *) {
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", qos: .background, attributes: []) //(label: "log4swift.dispatchLoggingQueue", attributes: [.serial, .background])
+    } else {
+      let backgroundQueue = DispatchQueue.global(priority: .background)
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [], target: backgroundQueue)
+    }
+    return createdQueue
+  }()
   
   /// The UTI string that identifies the logger. Example : product.module.feature
   public let identifier: String
