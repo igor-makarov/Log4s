@@ -30,7 +30,13 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case Asynchronous = "Asynchronous"
   }
   
-  private static let loggingQueue:DispatchQueue = {
+  // internal (not private) so `@testable import Log4swift` tests can
+  // call `loggingQueue.sync {}` as a drain barrier. dispatch_sync from the
+  // test main thread inherits the caller's QoS onto this .background queue,
+  // which guarantees all prior async blocks run — even on iOS Simulator
+  // under GitHub-Actions load, where libdispatch otherwise refuses to
+  // overcommit a .background worker for the entire 15 s test window.
+  internal static let loggingQueue:DispatchQueue = {
     let createdQueue: DispatchQueue
     
     if #available(OSX 10.10, *) {

@@ -95,7 +95,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     rootLogger.error("log3")
 
     let immediateLoggedMessagesCount = slowAppender.logMessages.count
-    self.waitUntilTrue{slowAppender.logMessages.count == 3}
+    drainLoggingQueue()
     let delayedLoggedMessagesCount = slowAppender.logMessages.count
 
     // Validate
@@ -121,7 +121,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     rootLogger.error{"log3"}
     
     let immediateLoggedMessagesCount = slowAppender.logMessages.count
-    self.waitUntilTrue{slowAppender.logMessages.count == 3}
+    drainLoggingQueue()
     let delayedLoggedMessagesCount = slowAppender.logMessages.count
         
     // Validate
@@ -145,7 +145,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     logger2.info{ Thread.sleep(forTimeInterval: 0.2); return "3"; }
     logger1.info{ Thread.sleep(forTimeInterval: 0.1); return "4"; }
     
-    self.waitUntilTrue{slowAppender.logMessages.count == 4}
+    drainLoggingQueue()
     
     // Validate
     let expectedOrderedMessages: [LoggedMessage] = [
@@ -168,24 +168,21 @@ class LoggerAsynchronicityTests: XCTestCase {
   }
   
   //MARK: private methods
-  
-  fileprivate func waitUntilTrue(_ conditionClosure: () -> Bool) {
-    // Park the main thread on the runloop's mach port instead of
-    // Thread.sleep's nanosleep. Both wait ~loopDelay seconds, but on iOS
-    // Simulator under GitHub-Actions load, libdispatch is far more willing
-    // to overcommit a `.background` QoS worker for Logger.loggingQueue when
-    // main is parked on the runloop (genuinely idle) vs looping through
-    // nanosleep (periodically active at its native QoS). With the old
-    // Thread.sleep poll, the logging queue's worker thread is never spawned
-    // during the 15 s window on a loaded CI runner and the async tests
-    // fail with "got 0 of N" even though the same code drains fine on a
-    // quiet local machine and in real apps (where the main runloop
-    // naturally parks the same way between events).
-    let timeout: TimeInterval = 15.0
-    let loopDelay: TimeInterval = 0.1
-    let deadline = Date().addingTimeInterval(timeout)
-    while !conditionClosure() && Date() < deadline {
-      RunLoop.main.run(until: Date().addingTimeInterval(loopDelay))
-    }
+
+  /// Block the test thread until every async log block queued before this
+  /// call has run. Previously this was a `Thread.sleep`-polling wait, then a
+  /// `RunLoop.main.run`-parked wait. Both relied on libdispatch voluntarily
+  /// scheduling a worker for `Logger.loggingQueue` (.background QoS) within
+  /// the test's timeout; on GitHub-hosted iOS Simulator runners it does not,
+  /// and the async tests fail with "got 0 of N" while the production logger
+  /// works fine everywhere else.
+  ///
+  /// `dispatch_sync` from the test thread onto the same serial queue sidesteps
+  /// that scheduling question entirely: the caller's QoS is inherited onto
+  /// the queue for the duration of the sync, forcing libdispatch to run every
+  /// previously-enqueued block before returning. Deterministic drain, no
+  /// polling, no timeout, no flakiness.
+  fileprivate func drainLoggingQueue() {
+    Logger.loggingQueue.sync {}
   }
 }
