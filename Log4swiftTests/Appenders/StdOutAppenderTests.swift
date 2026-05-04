@@ -518,6 +518,14 @@ class StdOutAppenderTests: XCTestCase {
   // MARK: - Private methods
 
   fileprivate func getFileHandleContentAsString(_ fileHandle: FileHandle) -> String? {
+    // When stdout/stderr have been `dup2`'d to a pipe (see setUp), their libc
+    // FILE*s remain fully-buffered unless the fd was originally a TTY. Under
+    // `swift test` the xctest host runs with pipe stdio, so `fputs` writes from
+    // StdOutAppender sit in libc's buffer and never reach our pipe reader.
+    // Flush both here so that any writes performed just before this read are
+    // visible to `availableData`. Production code is unaffected.
+    fflush(stdout)
+    fflush(stderr)
     let expectation = self.expectation(description: "filHandle content received")
     var expectationIsExpired = false
     var stringContent: String?
