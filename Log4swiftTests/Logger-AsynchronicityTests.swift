@@ -153,17 +153,26 @@ class LoggerAsynchronicityTests: XCTestCase {
       ("2", .Info),
       ("3", .Info),
       ("4", .Info)]
-    
-    XCTAssertEqual(slowAppender.logMessages.count, expectedOrderedMessages.count, "All messages were not logged")
-    for index in 0...expectedOrderedMessages.count - 1 {
-      XCTAssertTrue(slowAppender.logMessages[index] == expectedOrderedMessages[index], "Order of logged messages is not correct")
+
+    // Snapshot once so the count check and the per-index comparisons agree
+    // even if more work is still draining. If drain timed out, fail cleanly
+    // instead of indexing into a short array and crashing the test runner.
+    let recorded = slowAppender.logMessages
+    guard recorded.count == expectedOrderedMessages.count else {
+      XCTFail("All messages were not logged (got \(recorded.count) of \(expectedOrderedMessages.count))")
+      return
+    }
+    for index in 0..<expectedOrderedMessages.count {
+      XCTAssertTrue(recorded[index] == expectedOrderedMessages[index], "Order of logged messages is not correct")
     }
   }
   
   //MARK: private methods
   
   fileprivate func waitUntilTrue(_ conditionClosure: () -> Bool) {
-    let timeout = 5.0
+    // 15 s gives cold iOS simulators and loaded CI runners enough room;
+    // condition-satisfied exits immediately so the happy path is unaffected.
+    let timeout = 15.0
     let loopDelay = 0.1
     var loopCounter = 0
     while(conditionClosure() == false && timeout > (loopDelay * Double(loopCounter))) {

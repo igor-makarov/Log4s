@@ -29,8 +29,20 @@ typealias LoggedMessage = (message: String, level: LogLevel)
 */
 class MemoryAppender: Appender {
   var loggingDelay: TimeInterval? = nil
-  var logMessages = [LoggedMessage]()
-  
+
+  // `performLog` is invoked on the static async logging queue when a logger
+  // is marked `asynchronous`, while tests read `logMessages` from the test
+  // (main) thread. Guard both sides with a lock so `Array.append` reallocation
+  // cannot race with a read of `count`/subscript. The getter returns a value-
+  // type copy so callers observe a consistent snapshot.
+  private let lock = NSLock()
+  private var _logMessages = [LoggedMessage]()
+  var logMessages: [LoggedMessage] {
+    lock.lock()
+    defer { lock.unlock() }
+    return _logMessages
+  }
+
   init() {
     super.init("test.memoryAppender")
   }
@@ -43,7 +55,9 @@ class MemoryAppender: Appender {
     if let loggingDelay = self.loggingDelay {
       Thread.sleep(forTimeInterval: loggingDelay)
     }
-    logMessages.append((message: log, level: level))
+    lock.lock()
+    _logMessages.append((message: log, level: level))
+    lock.unlock()
   }
   
 }
