@@ -170,14 +170,22 @@ class LoggerAsynchronicityTests: XCTestCase {
   //MARK: private methods
   
   fileprivate func waitUntilTrue(_ conditionClosure: () -> Bool) {
-    // 15 s gives cold iOS simulators and loaded CI runners enough room;
-    // condition-satisfied exits immediately so the happy path is unaffected.
-    let timeout = 15.0
-    let loopDelay = 0.1
-    var loopCounter = 0
-    while(conditionClosure() == false && timeout > (loopDelay * Double(loopCounter))) {
-      Thread.sleep(forTimeInterval: loopDelay)
-      loopCounter += 1
+    // Park the main thread on the runloop's mach port instead of
+    // Thread.sleep's nanosleep. Both wait ~loopDelay seconds, but on iOS
+    // Simulator under GitHub-Actions load, libdispatch is far more willing
+    // to overcommit a `.background` QoS worker for Logger.loggingQueue when
+    // main is parked on the runloop (genuinely idle) vs looping through
+    // nanosleep (periodically active at its native QoS). With the old
+    // Thread.sleep poll, the logging queue's worker thread is never spawned
+    // during the 15 s window on a loaded CI runner and the async tests
+    // fail with "got 0 of N" even though the same code drains fine on a
+    // quiet local machine and in real apps (where the main runloop
+    // naturally parks the same way between events).
+    let timeout: TimeInterval = 15.0
+    let loopDelay: TimeInterval = 0.1
+    let deadline = Date().addingTimeInterval(timeout)
+    while !conditionClosure() && Date() < deadline {
+      RunLoop.main.run(until: Date().addingTimeInterval(loopDelay))
     }
   }
 }
